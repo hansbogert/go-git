@@ -145,9 +145,9 @@ func (w *Worktree) diffStagingWithWorktree(reverse, excludeIgnoredChanges bool) 
 
 	var c merkletrie.Changes
 	if reverse {
-		c, err = merkletrie.DiffTree(to, from, diffTreeIsEquals)
+		c, err = merkletrie.DiffTree(to, from, diffTreeIsEqualsWithModTime)
 	} else {
-		c, err = merkletrie.DiffTree(from, to, diffTreeIsEquals)
+		c, err = merkletrie.DiffTree(from, to, diffTreeIsEqualsWithModTime)
 	}
 
 	if err != nil {
@@ -158,6 +158,14 @@ func (w *Worktree) diffStagingWithWorktree(reverse, excludeIgnoredChanges bool) 
 		return w.excludeIgnoredChanges(c), nil
 	}
 	return c, nil
+}
+
+func diffTreeIsEqualsWithModTime(a, b noder.Hasher) bool {
+	if a.ModTime().Equal(b.ModTime()) {
+		return true
+	}
+
+	return diffTreeIsEquals(a, b)
 }
 
 func (w *Worktree) excludeIgnoredChanges(changes merkletrie.Changes) merkletrie.Changes {

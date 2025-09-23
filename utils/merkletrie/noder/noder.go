@@ -9,12 +9,16 @@
 // in a filesystem.
 package noder
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 // Hasher interface is implemented by types that can tell you
 // their hash.
 type Hasher interface {
 	Hash() []byte
+	ModTime() time.Time
 }
 
 // Equal functions take two hashers and return if they are equal.

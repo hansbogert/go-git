@@ -2,6 +2,7 @@ package object
 
 import (
 	"io"
+	"time"
 
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/filemode"
@@ -55,6 +56,10 @@ func (t *treeNoder) Hash() []byte {
 		return append(t.hash[:], filemode.Regular.Bytes()...)
 	}
 	return append(t.hash[:], t.mode.Bytes()...)
+}
+
+func (t *treeNoder) ModTime() time.Time {
+	return time.Time{}
 }
 
 func (t *treeNoder) Name() string {
